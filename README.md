@@ -64,15 +64,16 @@ El servidor estará disponible en <http://localhost:3000>.
 
 ## Endpoints
 
-``` POST /mail/parse
+``` bash
+POST /mail/parse
 ```
 
 Este endpoint permite procesar un archivo .eml que contiene un correo electrónico con adjuntos o enlaces que contienen JSON.
 
 ### Parámetros
 
-```filePath:
-La ruta del archivo .eml que se quiere procesar.
+```bash
+filePath: La ruta del archivo .eml que se quiere procesar.
 ```
 
 Ejemplo de solicitud

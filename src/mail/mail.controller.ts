@@ -6,7 +6,7 @@ export class MailController {
   constructor(private readonly mailService: MailService) {}
 
   @Get('parse')
-  async parseEmail(@Query('filePath') filePath: string) {
+  async parseEmail(@Query('filePath') filePath: string): Promise<any> {
     return this.mailService.parseEmail(filePath);
   }
 }

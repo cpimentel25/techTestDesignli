@@ -16,45 +16,80 @@ export class MailService {
         (attachment) => attachment.contentType === 'application/json',
       );
       if (jsonFile) {
-        jsonAttachment = jsonFile.content.toString();
-      }
-    }
-
-    // Si el JSON esta en el cuerpo del correo o en un enlace
-    if (!jsonAttachment && parsed.text) {
-      // Extrac link
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
-      const matches = parsed.text.match(urlRegex);
-
-      if (matches && matches.length > 0) {
-        const cleanUrl = matches[0].replace(/[>*]/g, ''); // Elimina caracteres extraños
-        console.log('🚀 Fetching JSON from:', cleanUrl);
-
         try {
-          const response = await fetch(cleanUrl);
-
-          // Verificamos si el content-type es JSON
-          const contentType = response.headers.get('content-type');
-
-          if (
-            response.ok &&
-            contentType &&
-            contentType.includes('application/json')
-          ) {
-            jsonAttachment = await response.json();
-          } else {
-            throw new Error(
-              `Invalid content-type: ${contentType}. Expected application/json.`,
-            );
-          }
+          jsonAttachment = JSON.parse(jsonFile.content.toString());
         } catch (error) {
-          console.error('Error fetching JSON from URL:', error);
+          console.error('Error parsing JSON from attachment:', error);
         }
       }
     }
 
-    return jsonAttachment
-      ? JSON.parse(jsonAttachment)
-      : { message: 'No JSON found' };
+    // Buscar enlace en el cuerpo del correo
+    if (!jsonAttachment && parsed.text) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const matches = parsed.text.match(urlRegex);
+
+      if (matches && matches.length > 0) {
+        for (const url of matches) {
+          try {
+            const cleanUrl = url.replace(/[>*]/g, ''); // Eliminar caracteres extraños
+
+            // Verificar si el enlace es un archivo JSON directo
+            let response = await fetch(cleanUrl);
+            let contentType = response.headers.get('content-type');
+            if (
+              response.ok &&
+              contentType &&
+              contentType.includes('application/json')
+            ) {
+              try {
+                jsonAttachment = await response.json();
+                break; // Salimos del bucle si encontramos el JSON
+              } catch (error) {
+                console.error('Error parsing JSON from URL:', error);
+              }
+            } else {
+              // Si no es JSON, verificar si es una pagina con un enlace al JSON
+              const pageContent = await response.text();
+              const jsonLinkMatches = pageContent.match(urlRegex);
+
+              if (jsonLinkMatches) {
+                for (const jsonLink of jsonLinkMatches) {
+                  try {
+                    response = await fetch(jsonLink);
+                    contentType = response.headers.get('content-type');
+
+                    if (
+                      response.ok &&
+                      contentType &&
+                      contentType.includes('application/json')
+                    ) {
+                      try {
+                        jsonAttachment = await response.json();
+                        break; // Salimos del bucle si encontramos el JSON
+                      } catch (error) {
+                        console.error(
+                          'Error parsing JSON from linked URL:',
+                          error,
+                        );
+                      }
+                    }
+                  } catch (error) {
+                    console.error(
+                      'Error fetching JSON from linked URL:',
+                      error,
+                    );
+                  }
+                }
+              }
+            }
+          } catch (error) {
+            console.error('Error fetching JSON from URL:', error);
+          }
+        }
+      }
+    }
+
+    return jsonAttachment || { message: 'No JSON found' };
   }
 }
