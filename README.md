@@ -4,18 +4,18 @@ Este proyecto es parte de una prueba técnica para un desarrollador de Nest.js. 
 
 ## Descripción General
 
-## Prueba Fácil
+### Prueba Fácil
 
 1. Convertir un JSON dado en una clase.
 2. Usar una librería de mapeo para convertir ese JSON en una estructura mapeada.
 3. Crear un controlador con un endpoint que reciba el primer JSON y devuelva el segundo JSON mapeado.
 
-## Verdadero Desafío
+### Verdadero Desafío
 
 1. Procesar un archivo .eml que contenga un archivo adjunto o un enlace a un archivo JSON.
 2. Crear un controlador que reciba la ruta del archivo .eml y extraiga el JSON, devolviéndolo como respuesta.
 
-## Requisitos Previos
+### Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
@@ -23,7 +23,7 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 - npm (Node Package Manager)
 - Nest.js CLI
 
-## Estructura del Proyecto
+### Estructura del Proyecto
 
 El proyecto está desarrollado utilizando el framework **Nest.js** y contiene los siguientes módulos principales:
 
@@ -32,7 +32,7 @@ El proyecto está desarrollado utilizando el framework **Nest.js** y contiene lo
 - **mail-parser**: Librería utilizada para parsear el contenido del correo electrónico y manejar sus adjuntos.
 - **jsonMapperService**: Servicio responsable del mapeo de JSON en la primera prueba.
 
-## Instalación
+### Instalación
 
 Para instalar y configurar el proyecto, sigue los siguientes pasos:
 
@@ -56,7 +56,7 @@ Para instalar y configurar el proyecto, sigue los siguientes pasos:
 
 4. Asegúrate de tener un archivo `.eml` para probar, por ejemplo, `nestJs_dev.eml`. Este archivo debe estar ubicado en tu máquina con la ruta adecuada. El archivo .eml debe tener un archivo adjunto JSON o un enlace al JSON para pruebas efectivas
 
-## Ejecución del Proyecto
+### Ejecución del Proyecto
 
 Para ejecutar el servidor de Nest.js, utiliza el siguiente comando:
 
