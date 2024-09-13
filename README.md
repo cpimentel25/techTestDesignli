@@ -98,3 +98,51 @@ Ejemplo de solicitud
     "date": "2024-09-12"
 }
 ```
+
+# JSON Conversion Endpoint
+
+```bash
+POST /json/convert
+```
+
+Este endpoint permite convertir un JSON proporcionado en el cuerpo de la solicitud a una estructura de clase específica.
+
+## Cuerpo de la Solicitud
+
+```json
+{
+  "title": "Sample Title #2",
+  "description": "This is a sample #2 description with random content.",
+  "content": [
+    "First paragraph of random content #2.",
+    "Second paragraph of random content #2.",
+    "Third paragraph of random content #2."
+  ],
+  "author": "Random Author #2",
+  "published": false,
+  "date": "2024-09-12"
+}
+```
+
+## Ejemplo de Solicitud
+
+```bash
+POST http://localhost:3000/json/convert
+```
+
+## Ejemplo de Respuesta
+
+```json
+{
+  "title": "Sample Title #2",
+  "description": "This is a sample #2 description with random content.",
+  "content": [
+    "First paragraph of random content #2.",
+    "Second paragraph of random content #2.",
+    "Third paragraph of random content #2."
+  ],
+  "author": "Random Author #2",
+  "published": false,
+  "date": "2024-09-12"
+}
+```
