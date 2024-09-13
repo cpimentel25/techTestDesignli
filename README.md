@@ -105,23 +105,33 @@ Ejemplo de solicitud
 POST /json/convert
 ```
 
-Este endpoint permite convertir un JSON proporcionado en el cuerpo de la solicitud a una estructura de clase específica.
+Este endpoint permite convertir un JSON recibido en el cuerpo de la solicitud a una estructura mapeada según las reglas definidas.
 
 ## Cuerpo de la Solicitud
 
 ```json
 {
-  "title": "Sample Title #2",
-  "description": "This is a sample #2 description with random content.",
-  "content": [
-    "First paragraph of random content #2.",
-    "Second paragraph of random content #2.",
-    "Third paragraph of random content #2."
-  ],
-  "author": "Random Author #2",
-  "published": false,
-  "date": "2024-09-12"
+  "Records": [
+    {
+      "ses": {
+        "receipt": {
+          "spamVerdict": { "status": "PASS" },
+          "virusVerdict": { "status": "PASS" },
+          "spfVerdict": { "status": "PASS" },
+          "dkimVerdict": { "status": "PASS" },
+          "dmarcVerdict": { "status": "PASS" },
+          "processingTimeMillis": 500
+        },
+        "mail": {
+          "timestamp": "2023-09-12T12:34:56.000Z",
+          "source": "user@example.com",
+          "destination": ["recipient@example.com"]
+        }
+      }
+    }
+  ]
 }
+
 ```
 
 ## Ejemplo de Solicitud
@@ -134,15 +144,24 @@ POST http://localhost:3000/json/convert
 
 ```json
 {
-  "title": "Sample Title #2",
-  "description": "This is a sample #2 description with random content.",
-  "content": [
-    "First paragraph of random content #2.",
-    "Second paragraph of random content #2.",
-    "Third paragraph of random content #2."
-  ],
-  "author": "Random Author #2",
-  "published": false,
-  "date": "2024-09-12"
+  "spam": true,
+  "virus": true,
+  "dns": true,
+  "mes": "September",
+  "retrasado": false,
+  "emisor": "user",
+  "receptor": ["recipient"]
 }
 ```
+
+## Descripción del mapeo
+
+El JSON de salida se crea a partir de los siguientes valores del JSON original:
+
+- spam: Basado en spamVerdict.status, si es "PASS", el valor será true.
+- virus: Basado en virusVerdict.status, si es "PASS", el valor será true.
+- dns: Solo será true si spfVerdict.status, dkimVerdict.status y dmarcVerdict.status son "PASS".
+- mes: Convertido de mail.timestamp a nombre del mes (por ejemplo, "September").
+- retrasado: Será true si processingTimeMillis es mayor a 1000.
+- emisor: El nombre de usuario antes del símbolo @ de mail.source.
+- receptor: Una lista con los nombres de usuario antes del símbolo @ de cada uno de los correos en mail.destination.
