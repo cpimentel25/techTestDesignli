@@ -24,6 +24,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "class-transformer": "^0.5.1",
+    "dayjs": "^1.11.13",
     "mailparser": "^3.7.1",
     "node-fetch": "^3.3.2",
     "reflect-metadata": "^0.2.0",
