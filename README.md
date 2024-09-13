@@ -65,7 +65,7 @@ El servidor estará disponible en <http://localhost:3000>.
 ## Endpoints
 
 ``` bash
-POST /mail/parse
+GET /mail/parse
 ```
 
 Este endpoint permite procesar un archivo .eml que contiene un correo electrónico con adjuntos o enlaces que contienen JSON.
@@ -98,6 +98,25 @@ Ejemplo de solicitud
     "date": "2024-09-12"
 }
 ```
+
+Funcionamiento del MailService
+
+El servicio extrae el archivo adjunto de tipo JSON del correo electrónico o, si no lo encuentra, busca enlaces en el cuerpo del correo que apunten a un archivo JSON.
+
+1. Si el archivo JSON está adjunto en el correo, el contenido se devuelve como respuesta.
+2. Si no hay un archivo adjunto, el servicio buscará enlaces en el cuerpo del correo que apunten a un archivo JSON.
+3. Si el enlace encontrado lleva a una página HTML, el servicio buscará dentro de esa página un enlace que finalmente apunte a un archivo JSON.
+
+En caso de no encontrar un archivo JSON en ninguna de las ubicaciones mencionadas, el servicio devolverá el siguiente mensaje:
+
+```json
+{
+  "message": "No JSON found"
+}
+```
+
+!Importante
+Asegúrate de que el archivo .eml contiene al menos un archivo JSON adjunto o un enlace al JSON, ya que de lo contrario la respuesta indicará que no se encontró ningún JSON.
 
 # JSON Conversion Endpoint
 
